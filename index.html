@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Выбор обуви для Ариши</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: lavender;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #wheel {
-            width: 500px;
-            height: 500px;
-            background: url('/path/to/your/wheel/image.png') no-repeat center center; /* Укажите путь к вашему изображению колеса */
-            background-size: contain;
-            position: relative;
-            transition: transform 4s ease-out;
-        }
-        #pointer {
-            position: absolute;
-            top: 0; /* Указатель расположен на верху колеса */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 20px 10px 0 10px;
-            border-color: red transparent transparent transparent;
-        }
-        button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 50px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Выбор туфель для Ариши</title>
+<style>
+    body {
+        background-color: lavender; /* Лавандовый фон */
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+    #shoeDisplay {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .shoe {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: white;
+    }
+    .selected {
+        border: 2px solid red; /* Выделение для выбранной пары */
+    }
+    #startButton {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body>
-    <h1>Какие туфли выбрать Арише?</h1>
-    <div id="wheel"></div>
-    <div id="pointer"></div>
-    <button onclick="spinWheel()">Крутить колесо!</button>
+<h1>Какие туфли выбрать Арише?</h1>
+<div id="shoeDisplay"></div>
+<button id="startButton">Начать пролистывание</button>
 
-    <script>
-        function spinWheel() {
-            // Настройка для позиционирования леопардового сегмента под указателем
-            const leopardIndex = 15; // Индекс леопардового сегмента, начиная с 0
-            const numSegments = 16; // Общее количество сегментов
-            const degreesPerSegment = 360 / numSegments;
-            const extraDegreesToAlignPointer = degreesPerSegment / 2;
-            const fullRotations = 360 * 5; // Пять полных вращений для драматичности
+<script>
+    const colors = [
+        'black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'purple',
+        'orange', 'grey', 'brown', 'navy', 'lime', 'teal', 'maroon', 'leopard'
+    ];
 
-            const rotation = fullRotations - leopardIndex * degreesPerSegment - extraDegreesToAlignPointer;
-            document.getElementById('wheel').style.transform = `rotate(${rotation}deg)`;
-        }
-    </script>
+    const shoeDisplay = document.getElementById('shoeDisplay');
+    colors.forEach(color => {
+        const shoeElement = document.createElement('div');
+        shoeElement.classList.add('shoe');
+        shoeElement.style.background = color === 'leopard' ? 'url("leopard_print.jpg")' : color;
+        shoeElement.textContent = color === 'leopard' ? '' : color;
+        shoeDisplay.appendChild(shoeElement);
+    });
+
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', () => {
+        const shoes = document.querySelectorAll('.shoe');
+        let index = 0;
+        shoes.forEach(shoe => shoe.classList.remove('selected'));
+
+        const interval = setInterval(() => {
+            if (index > 0) {
+                shoes[index - 1].classList.remove('selected');
+            }
+            shoes[index].classList.add('selected');
+
+            if (shoes[index].style.background.includes('leopard')) {
+                clearInterval(interval);
+            }
+
+            index = (index + 1) % shoes.length;
+        }, 100);
+    });
+</script>
 </body>
 </html>
