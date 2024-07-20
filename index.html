@@ -49,16 +49,21 @@
 
 <script>
     const colors = [
-        'black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'purple',
-        'orange', 'grey', 'brown', 'navy', 'lime', 'teal', 'maroon', 'leopard'
+        'white', 'red', 'blue', 'green', 'yellow', 'pink', 'purple', 'orange', 
+        'grey', 'brown', 'navy', 'lime', 'teal', 'maroon', 'black', 'leopard'
     ];
 
     const shoeDisplay = document.getElementById('shoeDisplay');
     colors.forEach(color => {
         const shoeElement = document.createElement('div');
         shoeElement.classList.add('shoe');
-        shoeElement.style.background = color === 'leopard' ? 'url("leopard_print.jpg")' : color;
-        shoeElement.textContent = color === 'leopard' ? '' : color;
+        if (color === 'leopard') {
+            shoeElement.textContent = 'леопардовый'; // Надпись для леопардового цвета
+            shoeElement.style.background = 'grey'; // Серый фон для леопардового
+        } else {
+            shoeElement.style.background = color;
+            shoeElement.textContent = color;
+        }
         shoeDisplay.appendChild(shoeElement);
     });
 
@@ -74,7 +79,7 @@
             }
             shoes[index].classList.add('selected');
 
-            if (shoes[index].style.background.includes('leopard')) {
+            if (shoes[index].textContent === 'леопардовый') {
                 clearInterval(interval);
             }
 
